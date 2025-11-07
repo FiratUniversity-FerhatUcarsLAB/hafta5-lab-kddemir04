@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 public class FizikFormul {
 
-    //Sabit: Yercekimi ivmesi
+     //Sabit: Yercekimi ivmesi
     final static double GRAVITY = 9.8;// m/s^2;
 
     //METOT 1 : Hız hesapla( v = s / t)
@@ -22,7 +22,7 @@ public class FizikFormul {
 
     }
 
-    //METOT 2 : IVME hesapla(a = DV / t)
+    //METOT 2 : IVME hesapla(a = Δv / t)
     public static double calculateAcceleration(double velocityChange, double time) {
         //a = hiz degisimi / zaman
         return velocityChange / time;
@@ -72,7 +72,6 @@ public class FizikFormul {
         System.out.println();
 
         //TEMEL OLCUMLER
-        System.out.println("TEMEL OLCUMLER");
         System.out.println("Mesafe(m): ");
         double x = input.nextDouble();
 
@@ -87,45 +86,50 @@ public class FizikFormul {
 
         System.out.println("Yukseklik (m): ");
         double height = input.nextDouble();
-        
+
         //METOTLAR
-        calculateVelocity(x, t);
-        calculateAcceleration(deltaV, t);
-        calculateVelocity(mass, calculateAcceleration(deltaV, t));
-        calculateWork(calculateForce(mass, calculateAcceleration(deltaV, t)), x);
-        calculatePower((calculateWork(calculateForce(mass, calculateAcceleration(deltaV, t)),x)),t);
-        calculateKineticEnergy(mass, calculateVelocity(x, t));
-        calculateMomentum(mass, calculateVelocity(x, t));
-        
+        double velocity = calculateVelocity(x, t);
+        double acceleration = calculateAcceleration(deltaV, t);
+        double force = calculateForce(mass, acceleration);
+        double work = calculateWork(force, x);
+        double power = calculatePower(work, t);
+        double kineticEnergy = calculateKineticEnergy(mass, velocity);
+        double potentialEnergy = calculatePotentialEnergy(mass, GRAVITY, height);
+        double totalEnergy = kineticEnergy + potentialEnergy;
+        double momentum = calculateMomentum(mass, velocity);
+
         // SONUCLARI YAZDIR
             System.out.println("\n==============================");
             System.out.println("      HESAPLAMA SONUCLARI");
             System.out.println("==============================");
 
             System.out.println("\nHIZ ve HAREKET:");
-            System.out.printf("  Hiz (v = s/t)             : %.2f m/s\n", calculateVelocity(x, t));
-            System.out.printf("  Ivme (a = Δv/t)           : %.2f m/s²\n", calculateAcceleration(deltaV, t));
+            System.out.printf("  Hiz (v = s/t)             : %.2f m/s\n", velocity);
+            System.out.printf("  Ivme (a = Δv/t)           : %.2f m/s²\n", acceleration);
 
 
             System.out.println("\nKUVVET ve IS:");
-            System.out.printf("  Kuvvet (F = m*a)          : %.2f N\n", calculateForce(mass,calculateAcceleration(deltaV, t)));
-            System.out.printf("  Is (W = F*d)              : %.2f J\n", calculateWork(calculateForce(mass, calculateAcceleration(deltaV, t)),x));
-            System.out.printf("  Guc (P = W/t)             : %.2f W\n", calculatePower(calculateWork(calculateForce(mass, calculateAcceleration(deltaV, t)), x),t));
+            System.out.printf("  Kuvvet (F = m*a)          : %.2f N\n", force);
+            System.out.printf("  Is (W = F*d)              : %.2f J\n", work);
+            System.out.printf("  Guc (P = W/t)             : %.2f W\n", power);
 
 
             System.out.println("\nENERJI:");
-            System.out.printf("  Kinetik Enerji (KE)       : %.2f J\n", calculateKineticEnergy(mass, calculateVelocity(x, t)));
-            System.out.printf("  Potansiyel Enerji (PE)    : %.2f J\n", calculatePotentialEnergy(mass, GRAVITY, height));
+            System.out.printf("  Kinetik Enerji (KE)       : %.2f J\n", kineticEnergy);
+            System.out.printf("  Potansiyel Enerji (PE)    : %.2f J\n", potentialEnergy);
             // Toplam enerji = KE + PE
-            System.out.printf("  Toplam Enerji             : %.2f J\n", (calculateKineticEnergy(mass, calculateVelocity(x, t))+ calculatePotentialEnergy(mass, GRAVITY, height)));
+            System.out.printf("  Toplam Enerji             : %.2f J\n", totalEnergy);
 
             System.out.println("\nMOMENTUM:");
-            System.out.printf("  Momentum (p = m*v)        : %.2f kg·m/s\n", calculateMomentum(mass, calculateVelocity(x, t)));
+            System.out.printf("  Momentum (p = m*v)        : %.2f kg·m/s\n", momentum);
 
 
             System.out.println("\n========================================");
+
+            input.close();
         }
 
-        input.close();
-    }
+
+
+
 }
